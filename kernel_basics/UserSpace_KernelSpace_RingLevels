@@ -1,0 +1,101 @@
+KERNEL SPACE vs USER SPACE & RING LEVELS
+
+1. User Space
+- Normal applications run here (Browser, VS Code, C++ Apps)
+- Restricted privileges
+- Cannot directly access hardware
+- Cannot access kernel memory
+- Uses System Calls to request OS services
+
+Examples:
+open(), read(), write(), ioctl(), fork()
+
+2. Kernel Space
+- Linux Kernel runs here
+- Device Drivers run here
+- Full access to hardware and memory
+- Handles Process Scheduling, Memory Management, File System and Interrupts
+
+Why Separation?
+- Security
+- Stability
+- Prevents applications from crashing the operating system
+
+--------------------------------------------------
+
+RING LEVELS (CPU Privilege Levels)
+
+Ring 0 (Kernel Mode)
+- Highest privilege
+- Kernel, Device Drivers, ISRs
+- Can access hardware directly
+- Can execute privileged instructions
+
+Ring 1 & Ring 2
+- Available in x86 architecture
+- Rarely used by Linux
+
+Ring 3 (User Mode)
+- Lowest privilege
+- User Applications run here
+- Cannot directly access hardware
+- Must use System Calls
+
+Linux mainly uses:
+Ring 0 = Kernel Space
+Ring 3 = User Space
+
+--------------------------------------------------
+
+RING TRANSITION (System Call Flow)
+
+Application (Ring 3)
+        |
+        | read(), write(), ioctl()
+        v
+System Call
+        |
+        v
+Kernel (Ring 0)
+        |
+        v
+Device Driver
+        |
+        v
+Hardware
+        |
+        v
+Return to Application (Ring 3)
+
+--------------------------------------------------
+
+Embedded Linux Example
+
+User Application
+      |
+      | read(fd, buffer, size
+      v
+Kernel
+  |
+  UART Driver
+  |
+  UART Hardware Registers
+
+The application never accesses UART registers directly;
+the driver does it on behalf of the application.
+---------------------------------------------------------------------------------------------------
+Interrupts
+
+Hardware Event
+  |
+  v
+  Interrupt Generated
+  |
+  v
+  ISR Executes in Kernel Mode (Ring 0)
+
+Reason:
+
+ISR needs privileged access to hardware registers.
+
+--------------------------------------------------
