@@ -2,14 +2,20 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 
-MODULE_LICENSE("GPL")
-MODULE_AUTHOR("Chethan")
-MODULE_DESCRIPTION("Simple hello_world kernel module")
+static int repeat = 1;
+module_param(repeat, int, 0);
+MODULE_PARM_DESC(repeat, "reapet value added");
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Chethan");
+MODULE_DESCRIPTION("Simple hello_world kernel module");
 
 static int __init hello_init(void){
-    printk(KERN_INFO "Hello world: Module loaded\n");
+	for(int i=0; i<repeat; i++)
+            printk(KERN_INFO "Hello world: Module loaded\n");
     return 0;
 }
+
 
 static void __exit hello_exit(void){
     printk(KERN_INFO "Hello world: Module Unloaded\n");
